@@ -45,3 +45,5 @@ HEADER_TRANSACTION = "X-Presto-Transaction-Id"
 HEADER_PREPARED_STATEMENT = 'X-Presto-Prepared-Statement'
 HEADER_ADDED_PREPARE = 'X-Presto-Added-Prepare'
 HEADER_DEALLOCATED_PREPARE = 'X-Presto-Deallocated-Prepare'
+
+HEADER_QUERY_METADATA = "X-Presto-Query-Metadata"
