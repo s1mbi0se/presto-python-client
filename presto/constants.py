@@ -47,3 +47,4 @@ HEADER_ADDED_PREPARE = 'X-Presto-Added-Prepare'
 HEADER_DEALLOCATED_PREPARE = 'X-Presto-Deallocated-Prepare'
 
 HEADER_QUERY_METADATA = "X-Presto-Query-Metadata"
+HEADER_DEBUG_LOG_ID = "X-Presto-Debug-Log-Id"

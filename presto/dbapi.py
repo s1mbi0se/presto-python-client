@@ -88,6 +88,7 @@ class Connection(object):
         isolation_level=IsolationLevel.AUTOCOMMIT,
         verify=True,
         query_metadata=None,
+        debug_log_id=None
     ):
         self.host = host
         self.port = port
@@ -110,6 +111,7 @@ class Connection(object):
         self._request = None
         self._transaction = None
         self.query_metadata = query_metadata
+        self.debug_log_id = debug_log_id
 
     @property
     def isolation_level(self):
@@ -169,7 +171,8 @@ class Connection(object):
             self.redirect_handler,
             self.max_attempts,
             self.request_timeout,
-            query_metadata=self.query_metadata
+            query_metadata=self.query_metadata,
+            debug_log_id=self.debug_log_id
         )
 
     def cursor(self):

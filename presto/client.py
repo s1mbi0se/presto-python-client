@@ -69,7 +69,8 @@ class ClientSession(object):
         properties=None,
         headers=None,
         transaction_id=None,
-        query_metadata=None
+        query_metadata=None,
+        debug_log_id=None
     ):
         self.catalog = catalog
         self.schema = schema
@@ -81,6 +82,7 @@ class ClientSession(object):
         self._headers = headers or {}
         self.transaction_id = transaction_id
         self.query_metadata = query_metadata
+        self.debug_log_id = debug_log_id
 
     @property
     def properties(self):
@@ -213,7 +215,8 @@ class PrestoRequest(object):
         request_timeout=constants.DEFAULT_REQUEST_TIMEOUT,  # type: Union[float, Tuple[float, float]]
         handle_retry=exceptions.RetryWithExponentialBackoff(),
         verify=True,     # type: Any
-        query_metadata=None   # type Optional[Any]
+        query_metadata=None,   # type Optional[Any]
+        debug_log_id=None   # type: int
     ):
         # type: (...) -> None
         self._client_session = ClientSession(
@@ -224,7 +227,8 @@ class PrestoRequest(object):
             session_properties,
             http_headers,
             transaction_id,
-            query_metadata
+            query_metadata,
+            debug_log_id
         )
 
         self._host = host
@@ -272,6 +276,9 @@ class PrestoRequest(object):
 
         if self._client_session.query_metadata:
             headers[constants.HEADER_QUERY_METADATA] = json.dumps(self._client_session.query_metadata)
+
+        if self._client_session.debug_log_id:
+            headers[constants.HEADER_DEBUG_LOG_ID] = json.dumps(self._client_session.debug_log_id)
 
         headers[constants.HEADER_SESSION] = ",".join(
             # ``name`` must not contain ``=``
