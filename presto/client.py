@@ -34,6 +34,7 @@ The main interface is :class:`PrestoQuery`: ::
 """
 from __future__ import absolute_import, division, print_function
 
+import json
 import os
 from typing import Any, Dict, List, Optional, Text, Tuple, Union  # NOQA for mypy types
 
@@ -68,6 +69,8 @@ class ClientSession(object):
         properties=None,
         headers=None,
         transaction_id=None,
+        query_metadata=None,
+        debug_log_id=None
     ):
         self.catalog = catalog
         self.schema = schema
@@ -78,6 +81,8 @@ class ClientSession(object):
         self._properties = properties
         self._headers = headers or {}
         self.transaction_id = transaction_id
+        self.query_metadata = query_metadata
+        self.debug_log_id = debug_log_id
 
     @property
     def properties(self):
@@ -209,6 +214,8 @@ class PrestoRequest(object):
         max_attempts=MAX_ATTEMPTS,  # type: int
         request_timeout=constants.DEFAULT_REQUEST_TIMEOUT,  # type: Union[float, Tuple[float, float]]
         handle_retry=exceptions.RetryWithExponentialBackoff(),
+        query_metadata=None,   # type Optional[Any]
+        debug_log_id=None   # type: int
     ):
         # type: (...) -> None
         self._client_session = ClientSession(
@@ -219,6 +226,8 @@ class PrestoRequest(object):
             session_properties,
             http_headers,
             transaction_id,
+            query_metadata,
+            debug_log_id
         )
 
         self._host = host
@@ -262,6 +271,12 @@ class PrestoRequest(object):
         headers[constants.HEADER_SCHEMA] = self._client_session.schema
         headers[constants.HEADER_SOURCE] = self._client_session.source
         headers[constants.HEADER_USER] = self._client_session.user
+
+        if self._client_session.query_metadata:
+            headers[constants.HEADER_QUERY_METADATA] = json.dumps(self._client_session.query_metadata)
+
+        if self._client_session.debug_log_id:
+            headers[constants.HEADER_DEBUG_LOG_ID] = json.dumps(self._client_session.debug_log_id)
 
         headers[constants.HEADER_SESSION] = ",".join(
             # ``name`` must not contain ``=``
