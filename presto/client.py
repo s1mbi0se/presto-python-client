@@ -215,7 +215,8 @@ class PrestoRequest(object):
         request_timeout=constants.DEFAULT_REQUEST_TIMEOUT,  # type: Union[float, Tuple[float, float]]
         handle_retry=exceptions.RetryWithExponentialBackoff(),
         query_metadata=None,   # type Optional[Any]
-        debug_log_id=None   # type: int
+        debug_log_id=None,   # type: int
+        verify=True     # type: Any
     ):
         # type: (...) -> None
         self._client_session = ClientSession(
@@ -239,6 +240,7 @@ class PrestoRequest(object):
         else:
             # mypy cannot follow module import
             self._http_session = self.http.Session()  # type: ignore
+            self._http_session.verify = verify
         self._http_session.headers.update(self.http_headers)
         self._exceptions = self.HTTP_EXCEPTIONS
         self._auth = auth
