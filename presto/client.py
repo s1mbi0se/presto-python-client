@@ -216,7 +216,8 @@ class PrestoRequest(object):
         handle_retry=exceptions.RetryWithExponentialBackoff(),
         verify=True,     # type: Any
         query_metadata=None,   # type Optional[Any]
-        debug_log_id=None   # type: int
+        debug_log_id=None,   # type: int
+        verify=True     # type: Any
     ):
         # type: (...) -> None
         self._client_session = ClientSession(
