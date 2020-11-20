@@ -14,8 +14,9 @@ from __future__ import division
 from __future__ import print_function
 
 import logging
+import os
 
-LEVEL = logging.INFO
+LEVEL = str(os.environ.get('PRESTO_CLIENT_LOG_LEVEL', default='INFO')).upper()
 
 
 # TODO: provide interface to use ``logging.dictConfig``
