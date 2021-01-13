@@ -217,7 +217,6 @@ class PrestoRequest(object):
         verify=True,     # type: Any
         query_metadata=None,   # type Optional[Any]
         debug_log_id=None,   # type: int
-        verify=True     # type: Any
     ):
         # type: (...) -> None
         self._client_session = ClientSession(
