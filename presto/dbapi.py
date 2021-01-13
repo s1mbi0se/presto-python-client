@@ -89,7 +89,6 @@ class Connection(object):
         verify=True,
         query_metadata=None,
         debug_log_id=None,
-        verify=True
     ):
         self.host = host
         self.port = port
